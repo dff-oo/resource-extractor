@@ -7,6 +7,8 @@ import { extractResources } from './extract';
 
 /** The resources repo, checked out next to this one. DFFOO_RESOURCES_OUT overrides it. */
 const outputDir = process.env.DFFOO_RESOURCES_OUT ?? resolve(__dirname, '../../dffoogg-resources/data');
+/** The CDN repo, checked out next to this one, which serves the character images. DFFOO_CDN_DIR overrides it. */
+const cdnDir = process.env.DFFOO_CDN_DIR ?? resolve(__dirname, '../../dffoogg-cdn');
 
 async function main(): Promise<void> {
   const config = gameConfig();
@@ -29,7 +31,7 @@ async function main(): Promise<void> {
   for (const [name, value] of Object.entries(files)) {
     await writeFile(resolve(outputDir, `${name}.json`), `${JSON.stringify(value, null, 2)}\n`);
   }
-  const images = writeCharacterImages(config.dlcDir, extracted.characters, resolve(outputDir, 'characters'));
+  const images = writeCharacterImages(config.dlcDir, extracted.characters, resolve(cdnDir, 'characters'));
   console.log(
     `wrote ${outputDir} (${extracted.characters.length} characters, ${images} character images, ${extracted.enemies.length} enemies, ${extracted.abilities.length} abilities, ${extracted.stages.length} stages, ${extracted.talks.length} talks, ${extracted.missions.length} missions)`,
   );
