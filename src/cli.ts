@@ -5,7 +5,7 @@ import { gameConfig } from './game-config';
 import { extractResources } from './extract';
 
 /** The resources repo, checked out next to this one. DFFOO_RESOURCES_OUT overrides it. */
-const outputDir = process.env.DFFOO_RESOURCES_OUT ?? resolve(__dirname, '../../dffoodev-resources/data');
+const outputDir = process.env.DFFOO_RESOURCES_OUT ?? resolve(__dirname, '../../dffoogg-resources/data');
 
 async function main(): Promise<void> {
   const config = gameConfig();

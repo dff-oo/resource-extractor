@@ -7,7 +7,7 @@ npm install
 npm run extract
 ```
 
-By default it writes `../dffoodev-resources/data`, the resources repo checked out next to this one. `DFFOO_RESOURCES_OUT` changes that.
+By default it writes `../dffoogg-resources/data`, the resources repo checked out next to this one. `DFFOO_RESOURCES_OUT` changes that.
 
 It reads the master directory from `gameConfig()` (`DFFOO_MASTER_ARCHIVE`, or `archive/gb/data/data/<package>/files` in this repo) and the downloaded files directory (`DFFOO_DLC_ARCHIVE`, or `archive/gb/sdcard/Android/data/<package>/files`). `DFFOO_ARCHIVE_ROOT` replaces `archive/gb`. It stops with an error when either directory is missing, because an extraction without the downloaded files would drop names.
 
