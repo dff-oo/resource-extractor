@@ -24,27 +24,35 @@ export interface FieldName extends Named {
   stage_id: number;
 }
 
+export interface Character extends Named {
+  /** The number in the stl_chara_event_* and stl_chara_* texture names. */
+  image_id: number;
+}
+
 const CHARACTER_MARKER = Buffer.from([
   0x00, 0x30, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00, 0x30, 0x00,
 ]);
+const CHARACTER_IMAGE_OFFSET = 68;
 
 /** mst_character.bin. See the repo README. */
-export function readCharacters(buffer: Buffer): Named[] {
-  const byId = new Map<number, string>();
-  const first = cString(buffer, 20);
-  if (printable(first)) byId.set(buffer.readInt32LE(16), first);
+export function readCharacters(buffer: Buffer): Character[] {
+  const byId = new Map<number, Character>();
+  const read = (idAt: number) => {
+    const id = buffer.readInt32LE(idAt);
+    const name = cString(buffer, idAt + 4);
+    if (id > 0 && id < 1000 && printable(name) && !byId.has(id)) {
+      byId.set(id, { id, name, image_id: buffer.readInt32LE(idAt + CHARACTER_IMAGE_OFFSET) });
+    }
+  };
+  read(16);
   let cursor = 0;
   while (cursor < buffer.length) {
     const at = buffer.indexOf(CHARACTER_MARKER, cursor);
     if (at < 0) break;
-    const id = buffer.readInt32LE(at + CHARACTER_MARKER.length);
-    const name = cString(buffer, at + CHARACTER_MARKER.length + 4);
-    if (id > 0 && id < 1000 && printable(name) && !byId.has(id)) byId.set(id, name);
+    read(at + CHARACTER_MARKER.length);
     cursor = at + CHARACTER_MARKER.length;
   }
-  return [...byId.entries()]
-    .map(([id, name]) => ({ id, name }))
-    .sort((a, b) => a.id - b.id);
+  return [...byId.values()].sort((a, b) => a.id - b.id);
 }
 
 /**
@@ -203,7 +211,7 @@ function mergeEnemyNames(scanned: Named[], display: Named[]): Named[] {
 }
 
 export async function extractResources(masterDir: string, dlcDir: string): Promise<{
-  characters: Named[];
+  characters: Character[];
   enemies: Named[];
   abilities: Ability[];
   items: ItemName[];

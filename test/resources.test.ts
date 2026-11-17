@@ -1,9 +1,22 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
+import { halve, trim } from '../src/character-images';
 import { gameConfig } from '../src/game-config';
 import { extractResources } from '../src/extract';
 
+function images(): void {
+  const rgba = Buffer.alloc(4 * 4 * 4);
+  rgba.set([255, 0, 0, 255], (1 * 4 + 1) * 4);
+  rgba.set([0, 0, 255, 255], (1 * 4 + 2) * 4);
+  const trimmed = trim({ rgba, width: 4, height: 4 });
+  assert.deepEqual([trimmed.width, trimmed.height], [2, 1]);
+  const half = halve(trimmed);
+  assert.deepEqual([half.width, half.height], [1, 1]);
+  assert.deepEqual([...half.rgba], [128, 0, 128, 255]);
+}
+
 async function main(): Promise<void> {
+  images();
   const { masterDir, dlcDir } = gameConfig();
   if (!existsSync(masterDir) || !existsSync(dlcDir)) {
     console.log('resources skipped (no local archive)');
@@ -16,6 +29,12 @@ async function main(): Promise<void> {
   assert.equal(name(resources.characters, 9), 'Tifa');
   assert.equal(name(resources.characters, 10), 'Warrior of Light');
   assert.equal(name(resources.characters, 14), 'Sazh');
+  const image = (id: number) => resources.characters.find((row) => row.id === id)?.image_id;
+  assert.equal(image(2), 1);
+  assert.equal(image(4), 8);
+  assert.equal(image(7), 13);
+  assert.equal(image(10), 16);
+  assert.equal(image(15), 24);
   assert.equal(name(resources.enemies, 1), 'Goblin');
   assert.equal(name(resources.enemies, 4), 'Skeleton');
   assert.equal(name(resources.enemies, 15), 'Behemoth');

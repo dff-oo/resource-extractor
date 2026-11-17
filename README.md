@@ -1,6 +1,6 @@
 # Resource extractor
 
-Reads a local copy of the global (GL, English) client and writes the JSON name tables the field builder and the server use. Nothing here is typed by hand: every file it writes comes from the client.
+Reads a local copy of the global (GL, English) client and writes the JSON name tables and character images the field builder and the server use. Nothing here is typed by hand: every file it writes comes from the client.
 
 ```bash
 npm install
@@ -21,7 +21,7 @@ The GL master archive stores some tables as XOR-0xFF JSON (`N1` + MD5 of `<name>
 
 | Resource | Source | How the name is stored |
 |---|---|---|
-| Characters | `mst_character.bin` | Record 0 is id 1, Cloud, a C string at +4. Later rows use the 12-byte marker `00 30 FF FF FF FF 01 00 00 00 30 00`, then an int32 id, then a C string. Cloud is 1, Vivi is 2, Warrior of Light is 10, Rem is 13, Tifa is 9, Sazh is 14. |
+| Characters | `mst_character.bin` | Record 0 is id 1, Cloud, a C string at +4. Later rows use the 12-byte marker `00 30 FF FF FF FF 01 00 00 00 30 00`, then an int32 id, then a C string. Cloud is 1, Vivi is 2, Warrior of Light is 10, Rem is 13, Tifa is 9, Sazh is 14. The int32 68 bytes after the id is `image_id`, the number in the `stl_chara_event_*` and `stl_chara_*` texture names: Vivi is 1, Snow is 8, Lightning is 13, Warrior of Light is 16, Zidane is 24. The `stl_chara_face_*` portraits use different numbers. |
 | Enemies | `MessageData_EnemyName`, then `mst_battle_enemy.json` | The message table is indexed by enemy id and wins: Goblin is 1, Skeleton is 4, Flan is 5, Red Bat is 8, Iron Giant is 14, Behemoth is 15, Floating Eye is 38, Miniature Magitek Armor is 67. Ids past its end come from `mst_battle_enemy.json` (binary, despite the suffix), where the name is a u32 length, then ASCII, then a NUL, 830 bytes after the int32 id. That scan misses Flan, Red Bat and Iron Giant; the message table has all three. |
 | Abilities | `mst_command_ability.bin` | The English name is repeated three times as u32 length + bytes. A length-prefixed description follows. The next int32 is the command ability id (Fire 17, Cross-Slash 20, Shining Shield 44, Aim 51, Beat Rush 52). Later rows reuse the same name for upgraded ids. |
 | Items | JSON masters | Crystals: `mst_crystal` (`cr_id`, item type 9). Summon materials: `mst_summon_material` (`sm_id`, item type 10). Equipment orbs: `mst_equipment_material` (`em_id`, item type 11; High Power Orb is 2). Tickets: `mst_ticket` (`ticket_id`, item type 8; Tutorial Draw Ticket is 2). Gil is item type 99 id 1 and gems are type 99 id 2; those two are currency, not master rows, and the extractor adds them itself. |
@@ -36,4 +36,6 @@ The GL master archive stores some tables as XOR-0xFF JSON (`N1` + MD5 of `<name>
 
 `{characters,enemies,abilities,items,summons,fields,stages,missions,talks}.json`
 
-Each record has an `id` and a `name`, except items, which have `item_type`, `item_id` and `name`, and stages, which have `id` and `model`. Abilities also include `description` with the client's `\b` colour codes left in place.
+Each record has an `id` and a `name`, except items, which have `item_type`, `item_id` and `name`, and stages, which have `id` and `model`. Abilities also include `description` with the client's `\b` colour codes left in place. Characters also include `image_id`.
+
+`characters/<image_id>.png` is each character's head, taken from `stl_chara_event_<image_id>.g1t.dz`, trimmed to its opaque pixels and halved. Those files hold several `.dz` chunks, so [oo_tool](https://www.npmjs.com/package/oo_tool) unpacks them (`DFFOO_UNPACKER` points at another copy) into a cache in the temp folder. The first run takes several minutes. The texture is one g1t image in format 0x00, 8-bit RGBA.
