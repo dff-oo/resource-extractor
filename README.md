@@ -9,7 +9,7 @@ npm run extract
 
 By default it writes `../dffoogg-resources/data`, the resources repo checked out next to this one. `DFFOO_RESOURCES_OUT` changes that.
 
-It reads the master directory from `gameConfig()` (`DFFOO_MASTER_ARCHIVE`, or `archive/gb/data/data/<package>/files` in this repo) and the downloaded files directory (`DFFOO_DLC_ARCHIVE`, or `archive/gb/sdcard/Android/data/<package>/files`). `DFFOO_ARCHIVE_ROOT` replaces `archive/gb`. It stops with an error when either directory is missing, because an extraction without the downloaded files would drop names.
+It reads the device archive from the [game](https://github.com/dffoogg/game) repo, checked out next to this one as `../dffoogg-game` (`DFFOO_GAME_DIR` overrides that). The masters are `archive/data/data/<package>/files` there (`DFFOO_MASTER_ARCHIVE` overrides it) and the downloaded files are `archive/sdcard/Android/data/<package>/files` (`DFFOO_DLC_ARCHIVE`). It stops with an error when either directory is missing, because an extraction without the downloaded files would drop names.
 
 Copy the written files into the field builder's `resources/` and the server's `resources/` when those need the names. Both folders are git-ignored.
 

@@ -12,11 +12,11 @@ export interface GameConfig {
 
 /** Archive paths for the extractor. Only the global (GL) client is supported. */
 export function gameConfig(env: NodeJS.ProcessEnv = process.env): GameConfig {
-  const root = env.DFFOO_ARCHIVE_ROOT ?? resolve(__dirname, '../archive/gb');
+  const archive = resolve(env.DFFOO_GAME_DIR ?? resolve(__dirname, '../../dffoogg-game'), 'archive');
   return {
     version: env.DFFOO_MASTER_VERSION ?? '35500000',
-    masterDir: env.DFFOO_MASTER_ARCHIVE ?? resolve(root, 'data', 'data', PACKAGE_NAME, 'files'),
-    dlcDir: env.DFFOO_DLC_ARCHIVE ?? resolve(root, 'sdcard', 'Android', 'data', PACKAGE_NAME, 'files'),
+    masterDir: env.DFFOO_MASTER_ARCHIVE ?? resolve(archive, 'data', 'data', PACKAGE_NAME, 'files'),
+    dlcDir: env.DFFOO_DLC_ARCHIVE ?? resolve(archive, 'sdcard', 'Android', 'data', PACKAGE_NAME, 'files'),
     packageName: PACKAGE_NAME,
   };
 }
