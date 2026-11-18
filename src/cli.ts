@@ -6,9 +6,9 @@ import { writeCharacterImages } from './character-images';
 import { extractResources } from './extract';
 
 /** The resources repo, checked out next to this one. DFFOO_RESOURCES_OUT overrides it. */
-const outputDir = process.env.DFFOO_RESOURCES_OUT ?? resolve(__dirname, '../../dffoogg-resources/data');
+const outputDir = process.env.DFFOO_RESOURCES_OUT ?? resolve(__dirname, '../../dff-oo-resources/data');
 /** The CDN repo, checked out next to this one, which serves the character images. DFFOO_CDN_DIR overrides it. */
-const cdnDir = process.env.DFFOO_CDN_DIR ?? resolve(__dirname, '../../dffoogg-cdn');
+const cdnDir = process.env.DFFOO_CDN_DIR ?? resolve(__dirname, '../../dff-oo-cdn');
 
 async function main(): Promise<void> {
   const config = gameConfig();

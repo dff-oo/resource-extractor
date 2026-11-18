@@ -12,7 +12,7 @@ export interface GameConfig {
 
 /** Archive paths for the extractor. Only the global (GL) client is supported. */
 export function gameConfig(env: NodeJS.ProcessEnv = process.env): GameConfig {
-  const archive = resolve(env.DFFOO_GAME_DIR ?? resolve(__dirname, '../../dffoogg-game'), 'archive');
+  const archive = resolve(env.DFFOO_GAME_DIR ?? resolve(__dirname, '../../dff-oo-game'), 'archive');
   return {
     version: env.DFFOO_MASTER_VERSION ?? '35500000',
     masterDir: env.DFFOO_MASTER_ARCHIVE ?? resolve(archive, 'data', 'data', PACKAGE_NAME, 'files'),

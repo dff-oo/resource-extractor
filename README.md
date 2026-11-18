@@ -7,9 +7,9 @@ npm install
 npm run extract
 ```
 
-By default it writes `../dffoogg-resources/data`, the resources repo checked out next to this one. `DFFOO_RESOURCES_OUT` changes that.
+By default it writes `../dff-oo-resources/data`, the resources repo checked out next to this one. `DFFOO_RESOURCES_OUT` changes that.
 
-It reads the device archive from the [game](https://github.com/dffoogg/game) repo, checked out next to this one as `../dffoogg-game` (`DFFOO_GAME_DIR` overrides that). The masters are `archive/data/data/<package>/files` there (`DFFOO_MASTER_ARCHIVE` overrides it) and the downloaded files are `archive/sdcard/Android/data/<package>/files` (`DFFOO_DLC_ARCHIVE`). It stops with an error when either directory is missing, because an extraction without the downloaded files would drop names.
+It reads the device archive from the [game](https://github.com/dff-oo/game) repo, checked out next to this one as `../dff-oo-game` (`DFFOO_GAME_DIR` overrides that). The masters are `archive/data/data/<package>/files` there (`DFFOO_MASTER_ARCHIVE` overrides it) and the downloaded files are `archive/sdcard/Android/data/<package>/files` (`DFFOO_DLC_ARCHIVE`). It stops with an error when either directory is missing, because an extraction without the downloaded files would drop names.
 
 Copy the written files into the field builder's `resources/` and the server's `resources/` when those need the names. Both folders are git-ignored.
 
@@ -38,4 +38,4 @@ The GL master archive stores some tables as XOR-0xFF JSON (`N1` + MD5 of `<name>
 
 Each record has an `id` and a `name`, except items, which have `item_type`, `item_id` and `name`, and stages, which have `id` and `model`. Abilities also include `description` with the client's `\b` colour codes left in place. Characters also include `image_id`.
 
-`characters/<image_id>.png` goes to the [cdn](https://github.com/dffoogg/cdn) repo checked out next to this one as `../dffoogg-cdn` (`DFFOO_CDN_DIR` overrides that), not to the resources repo. It is each character's head, taken from `stl_chara_event_<image_id>.g1t.dz`, trimmed to its opaque pixels and halved. Those files hold several `.dz` chunks, so [oo_tool](https://www.npmjs.com/package/oo_tool) unpacks them (`DFFOO_UNPACKER` points at another copy) into a cache in the temp folder. The first run takes several minutes. The texture is one g1t image in format 0x00, 8-bit RGBA.
+`characters/<image_id>.png` goes to the [cdn](https://github.com/dff-oo/cdn) repo checked out next to this one as `../dff-oo-cdn` (`DFFOO_CDN_DIR` overrides that), not to the resources repo. It is each character's head, taken from `stl_chara_event_<image_id>.g1t.dz`, trimmed to its opaque pixels and halved. Those files hold several `.dz` chunks, so [oo_tool](https://www.npmjs.com/package/oo_tool) unpacks them (`DFFOO_UNPACKER` points at another copy) into a cache in the temp folder. The first run takes several minutes. The texture is one g1t image in format 0x00, 8-bit RGBA.

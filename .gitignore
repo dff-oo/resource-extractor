@@ -1,6 +1,6 @@
 node_modules/
 
-# Client data. It belongs in ../dffoogg-game; never commit it here.
+# Client data. It belongs in ../dff-oo-game; never commit it here.
 /archive/
 *.dz
 *.bin

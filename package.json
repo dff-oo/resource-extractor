@@ -1,5 +1,5 @@
 {
-  "name": "@dffoogg/resource-extractor",
+  "name": "@dff-oo/resource-extractor",
   "version": "0.1.0",
   "private": true,
   "description": "Extracts client names for the DFFOO field builder and server",
